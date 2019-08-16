@@ -1,0 +1,26 @@
+#lang eopl
+
+(define (sort lst)
+  (define (insert x sorted)
+    (if (null? sorted)
+        (list x)
+        (if (< x (car sorted))
+            (cons x sorted)
+            (cons (car sorted) (insert x (cdr sorted))))))
+  (define (isort sorted unsorted)
+    (if (null? unsorted)
+        sorted
+        (isort (insert (car unsorted) sorted) (cdr unsorted))))
+  (isort '() lst))
+
+(eopl:pretty-print (sort '(8 2 5 2 3)))
+(eopl:pretty-print (sort '()))
+(eopl:pretty-print (sort '(1)))
+(eopl:pretty-print (sort '(1 2)))
+(eopl:pretty-print (sort '(2 1)))
+(eopl:pretty-print (sort '(1 2 3)))
+(eopl:pretty-print (sort '(1 3 2)))
+(eopl:pretty-print (sort '(2 1 3)))
+(eopl:pretty-print (sort '(2 3 1)))
+(eopl:pretty-print (sort '(3 1 2)))
+(eopl:pretty-print (sort '(3 2 1)))

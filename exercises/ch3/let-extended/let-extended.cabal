@@ -1,0 +1,20 @@
+name: let-extended
+version: 0.1.0.0
+build-type: Simple
+cabal-version: >=1.10
+
+library
+  hs-source-dirs: src
+
+  exposed-modules:
+    AST
+    Env
+    Interpreter
+    Let
+    Parser
+
+  build-depends:
+    base >= 4.7 && < 5,
+    parsec
+
+  default-language: Haskell2010

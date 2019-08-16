@@ -1,0 +1,31 @@
+Program ::= Expr
+
+Expr ::= Const
+       | Var
+       | Begin | Assign
+       | Diff
+       | Zero | If
+       | Let | Letrec
+       | Proc | Call
+
+Const  ::= Number
+Number ::= '-'? [0-9]+
+
+Var ::= Id
+
+Begin  ::= 'begin' Expr (';' Expr)* 'end'
+Assign ::= 'set' Id '=' Expr
+
+Diff ::= '-' '(' Expr ',' Expr ')'
+
+Zero ::= 'zero?' '(' Expr ')'
+If   ::= 'if' Expr 'then' Expr 'else' Expr
+
+Let    ::= 'let' Id '=' Expr 'in' Expr
+Letrec ::= 'letrec' Decl+ 'in' Expr
+Decl   ::= Id '(' Id ')' '=' Expr
+
+Proc ::= 'proc' '(' Id ')' Expr
+Call ::= '(' Expr Expr ')'
+
+Id ::= [a-z]+

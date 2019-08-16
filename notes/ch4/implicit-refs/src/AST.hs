@@ -1,0 +1,21 @@
+module AST (Program(..), Expr(..), Decl(..), Id) where
+
+data Program = Program Expr deriving Show
+
+data Expr
+  = Const Integer
+  | Var Id
+  | Begin [Expr]
+  | Assign Id Expr
+  | Diff Expr Expr
+  | Zero Expr
+  | If Expr Expr Expr
+  | Let Id Expr Expr
+  | Letrec [Decl] Expr
+  | Proc Id Expr
+  | Call Expr Expr
+  deriving Show
+
+data Decl = Decl Id Id Expr deriving Show
+
+type Id = String
