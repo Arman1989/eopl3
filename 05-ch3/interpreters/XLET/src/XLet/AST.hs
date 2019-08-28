@@ -10,6 +10,9 @@ data Expr
   | If Expr Expr Expr
   | Let Id Expr Expr
   | Minus Expr
+  | Add Expr Expr
+  | Mul Expr Expr
+  | Div Expr Expr
   deriving Show
 
 type Number = Integer

@@ -71,6 +71,27 @@ valueOfExpr expr env =
       in
         NumberVal (negate (toNumber val))
 
+    Add a b ->
+      let
+        aVal = valueOfExpr a env
+        bVal = valueOfExpr b env
+      in
+        NumberVal (toNumber aVal + toNumber bVal)
+
+    Mul a b ->
+      let
+        aVal = valueOfExpr a env
+        bVal = valueOfExpr b env
+      in
+        NumberVal (toNumber aVal * toNumber bVal)
+
+    Div a b ->
+      let
+        aVal = valueOfExpr a env
+        bVal = valueOfExpr b env
+      in
+        NumberVal (toNumber aVal `div` toNumber bVal)
+
 toNumber :: Value -> Number
 toNumber (NumberVal n) = n
 toNumber x = error ("Expected a number: " ++ show x)

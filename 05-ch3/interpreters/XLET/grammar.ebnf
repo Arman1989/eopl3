@@ -1,5 +1,7 @@
 Program ::= Expr
-Expr    ::= Const | Var | Diff | Zero | If | Let | Minus
+Expr    ::= Const | Var | Diff | Zero | If | Let
+          | Minus
+          | Add | Mul | Div
 Const   ::= Number
 Var     ::= Id
 Diff    ::= '-' '(' Expr ',' Expr ')'
@@ -7,6 +9,9 @@ Zero    ::= 'zero?' '(' Expr ')'
 If      ::= 'if' Expr 'then' Expr 'else' Expr
 Let     ::= 'let' Id '=' Expr 'in' Expr
 Minus   ::= 'minus' '(' Expr ')'
+Add     ::= 'add' '(' Expr ',' Expr ')'
+Mul     ::= 'mul' '(' Expr ',' Expr ')'
+Div     ::= 'div' '(' Expr ',' Expr ')'
 Number  ::= [0-9]+
 Id      ::= [a-z]+
 

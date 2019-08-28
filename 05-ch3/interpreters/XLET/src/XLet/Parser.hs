@@ -32,6 +32,9 @@ expr
   <|> ifExpr
   <|> letExpr
   <|> minusExpr
+  <|> addExpr
+  <|> mulExpr
+  <|> divExpr
   <|> varExpr
 
 constExpr :: Parser Expr
@@ -41,7 +44,6 @@ diffExpr :: Parser Expr
 diffExpr = minus *> (parens (Diff <$> (expr <* comma) <*> expr))
   where
     minus = char '-'
-    comma = lexeme (char ',')
 
 zeroExpr :: Parser Expr
 zeroExpr = reserved "zero?" *> (parens (Zero <$> expr))
@@ -65,10 +67,28 @@ letExpr =
 minusExpr :: Parser Expr
 minusExpr = reserved "minus" *> (parens (Minus <$> expr))
 
+addExpr :: Parser Expr
+addExpr = addToken *> (parens (Add <$> (expr <* comma) <*> expr))
+  where
+    addToken = reserved "add"
+
+mulExpr :: Parser Expr
+mulExpr = mulToken *> (parens (Mul <$> (expr <* comma) <*> expr))
+  where
+    mulToken = reserved "mul"
+
+divExpr :: Parser Expr
+divExpr = divToken *> (parens (Div <$> (expr <* comma) <*> expr))
+  where
+    divToken = reserved "div"
+
 varExpr :: Parser Expr
 varExpr = Var <$> identifier
 
 -- Helpers
+
+comma :: Parser Char
+comma = lexeme (char ',')
 
 number :: Parser Number
 number = lexeme (Token.decimal lexer)
@@ -96,11 +116,14 @@ letDef = emptyDef
   { Token.identStart = oneOf ['a'..'z']
   , Token.identLetter = Token.identStart letDef
   , Token.reservedNames =
-      [ "else"
+      [ "add"
+      , "div"
+      , "else"
       , "if"
       , "in"
       , "let"
       , "minus"
+      , "mul"
       , "then"
       , "zero?"
       ]
