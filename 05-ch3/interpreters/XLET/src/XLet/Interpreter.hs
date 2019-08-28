@@ -65,6 +65,12 @@ valueOfExpr expr env =
       in
         valueOfExpr body (Env.extend var val env)
 
+    Minus e ->
+      let
+        val = valueOfExpr e env
+      in
+        NumberVal (negate (toNumber val))
+
 toNumber :: Value -> Number
 toNumber (NumberVal n) = n
 toNumber x = error ("Expected a number: " ++ show x)

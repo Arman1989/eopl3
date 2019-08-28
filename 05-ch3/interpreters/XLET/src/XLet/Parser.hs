@@ -31,6 +31,7 @@ expr
   <|> zeroExpr
   <|> ifExpr
   <|> letExpr
+  <|> minusExpr
   <|> varExpr
 
 constExpr :: Parser Expr
@@ -60,6 +61,9 @@ letExpr =
     letToken = reserved "let"
     inToken = reserved "in"
     equal = lexeme (char '=')
+
+minusExpr :: Parser Expr
+minusExpr = reserved "minus" *> (parens (Minus <$> expr))
 
 varExpr :: Parser Expr
 varExpr = Var <$> identifier
@@ -96,6 +100,7 @@ letDef = emptyDef
       , "if"
       , "in"
       , "let"
+      , "minus"
       , "then"
       , "zero?"
       ]
