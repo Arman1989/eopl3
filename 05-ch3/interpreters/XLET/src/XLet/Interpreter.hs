@@ -1,6 +1,7 @@
 module XLet.Interpreter (Value, run) where
 
 import qualified XLet.Env as Env
+import qualified XLet.List as List
 
 import XLet.AST
 import XLet.Parser (parse)
@@ -8,12 +9,33 @@ import XLet.Parser (parse)
 data Value
   = NumberVal Number
   | BoolVal Bool
+  | ListVal (List.List Value)
 
 type Environment = Env.Env Id Value
 
 instance Show Value where
   show (NumberVal n) = show n
   show (BoolVal b) = if b then "True" else "False"
+  show (ListVal l) =
+    if List.isEmpty l then
+      "()"
+    else
+      let
+        car = List.car l
+        cdr = List.cdr l
+      in
+        case cdr of
+          ListVal rest ->
+            if List.isEmpty rest then
+              "(" ++ show car ++ ")"
+            else
+              "(" ++ show car ++ " " ++ removeParens (show cdr) ++ ")"
+
+          _ ->
+            "(" ++ show car ++ " . " ++ show cdr ++ ")"
+
+removeParens :: String -> String
+removeParens = init . tail
 
 run :: String -> Value
 run = valueOfProgram . parse
@@ -113,6 +135,25 @@ valueOfExpr expr env =
       in
         BoolVal (toNumber aVal < toNumber bVal)
 
+    Cons a b ->
+      let
+        aVal = valueOfExpr a env
+        bVal = valueOfExpr b env
+      in
+        ListVal (List.cons aVal bVal)
+
+    Car l ->
+      List.car (toList (valueOfExpr l env))
+
+    Cdr l ->
+      List.cdr (toList (valueOfExpr l env))
+
+    Null l ->
+      BoolVal (List.isEmpty (toList (valueOfExpr l env)))
+
+    EmptyList ->
+      ListVal List.empty
+
 toNumber :: Value -> Number
 toNumber (NumberVal n) = n
 toNumber x = error ("Expected a number: " ++ show x)
@@ -120,3 +161,7 @@ toNumber x = error ("Expected a number: " ++ show x)
 toBool :: Value -> Bool
 toBool (BoolVal b) = b
 toBool x = error ("Expected a boolean: " ++ show x)
+
+toList :: Value -> List.List Value
+toList (ListVal l) = l
+toList x = error ("Expected a list: " ++ show x)

@@ -12,6 +12,7 @@ library
   other-modules:
     XLet.AST
     XLet.Env
+    XLet.List
     XLet.Parser
 
   build-depends:

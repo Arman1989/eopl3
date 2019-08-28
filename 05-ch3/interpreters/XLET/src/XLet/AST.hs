@@ -16,6 +16,11 @@ data Expr
   | Equal Expr Expr
   | Greater Expr Expr
   | Less Expr Expr
+  | Cons Expr Expr
+  | Car Expr
+  | Cdr Expr
+  | Null Expr
+  | EmptyList
   deriving Show
 
 type Number = Integer

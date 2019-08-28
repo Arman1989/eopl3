@@ -3,6 +3,7 @@ Expr    ::= Const | Var | Diff | Zero | If | Let
           | Minus
           | Add | Mul | Div
           | Equal | Greater | Less
+          | Cons | Car | Cdr | Null | EmptyList
 Const   ::= Number
 Var     ::= Id
 Diff    ::= '-' '(' Expr ',' Expr ')'
@@ -16,6 +17,13 @@ Div     ::= 'div' '(' Expr ',' Expr ')'
 Equal   ::= 'equal?' '(' Expr ',' Expr ')'
 Greater ::= 'greater?' '(' Expr ',' Expr ')'
 Less    ::= 'less?' '(' Expr ',' Expr ')'
+
+Cons      ::= 'cons' '(' Expr ',' Expr ')'
+Car       ::= 'car' '(' Expr ')'
+Cdr       ::= 'cdr' '(' Expr ')'
+Null      ::= 'null?' '(' Expr ')'
+EmptyList ::= 'emptylist'
+
 Number  ::= [0-9]+
 Id      ::= [a-z]+
 
