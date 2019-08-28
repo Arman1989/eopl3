@@ -35,6 +35,9 @@ expr
   <|> addExpr
   <|> mulExpr
   <|> divExpr
+  <|> equalExpr
+  <|> greaterExpr
+  <|> lessExpr
   <|> varExpr
 
 constExpr :: Parser Expr
@@ -82,6 +85,21 @@ divExpr = divToken *> (parens (Div <$> (expr <* comma) <*> expr))
   where
     divToken = reserved "div"
 
+equalExpr :: Parser Expr
+equalExpr = equalToken *> (parens (Equal <$> (expr <* comma) <*> expr))
+  where
+    equalToken = reserved "equal?"
+
+greaterExpr :: Parser Expr
+greaterExpr = greaterToken *> (parens (Greater <$> (expr <* comma) <*> expr))
+  where
+    greaterToken = reserved "greater?"
+
+lessExpr :: Parser Expr
+lessExpr = lessToken *> (parens (Less <$> (expr <* comma) <*> expr))
+  where
+    lessToken = reserved "less?"
+
 varExpr :: Parser Expr
 varExpr = Var <$> identifier
 
@@ -119,8 +137,11 @@ letDef = emptyDef
       [ "add"
       , "div"
       , "else"
+      , "equal?"
+      , "greater?"
       , "if"
       , "in"
+      , "less?"
       , "let"
       , "minus"
       , "mul"

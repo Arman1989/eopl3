@@ -117,6 +117,7 @@ My [notes](05-ch3.md).
 - [x] [3.5](05-ch3/ex3.5.md)
 - [x] [3.6](05-ch3/ex3.6.md)
 - [x] [3.7](05-ch3/ex3.7.md)
+- [x] [3.8](05-ch3/ex3.8.md)
 
 ## Resources
 

@@ -92,6 +92,27 @@ valueOfExpr expr env =
       in
         NumberVal (toNumber aVal `div` toNumber bVal)
 
+    Equal a b ->
+      let
+        aVal = valueOfExpr a env
+        bVal = valueOfExpr b env
+      in
+        BoolVal (toNumber aVal == toNumber bVal)
+
+    Greater a b ->
+      let
+        aVal = valueOfExpr a env
+        bVal = valueOfExpr b env
+      in
+        BoolVal (toNumber aVal > toNumber bVal)
+
+    Less a b ->
+      let
+        aVal = valueOfExpr a env
+        bVal = valueOfExpr b env
+      in
+        BoolVal (toNumber aVal < toNumber bVal)
+
 toNumber :: Value -> Number
 toNumber (NumberVal n) = n
 toNumber x = error ("Expected a number: " ++ show x)

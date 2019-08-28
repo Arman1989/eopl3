@@ -101,5 +101,23 @@ spec = do
 
       run input `shouldBe` "10"
 
+  describe "example 15" $ do
+    it "returns True" $ do
+      let input = "equal?(-(10, 2), mul(2, 4))"
+
+      run input `shouldBe` "True"
+
+  describe "example 16" $ do
+    it "returns False" $ do
+      let input = "greater?(add(10, 2), mul(5, 4))"
+
+      run input `shouldBe` "False"
+
+  describe "example 17" $ do
+    it "returns True" $ do
+      let input = "less?(mul(1, mul(2, 0)), -(2, 1))"
+
+      run input `shouldBe` "True"
+
 run :: String -> String
 run = show . I.run

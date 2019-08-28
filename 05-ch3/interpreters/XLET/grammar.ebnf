@@ -2,6 +2,7 @@ Program ::= Expr
 Expr    ::= Const | Var | Diff | Zero | If | Let
           | Minus
           | Add | Mul | Div
+          | Equal | Greater | Less
 Const   ::= Number
 Var     ::= Id
 Diff    ::= '-' '(' Expr ',' Expr ')'
@@ -12,6 +13,9 @@ Minus   ::= 'minus' '(' Expr ')'
 Add     ::= 'add' '(' Expr ',' Expr ')'
 Mul     ::= 'mul' '(' Expr ',' Expr ')'
 Div     ::= 'div' '(' Expr ',' Expr ')'
+Equal   ::= 'equal?' '(' Expr ',' Expr ')'
+Greater ::= 'greater?' '(' Expr ',' Expr ')'
+Less    ::= 'less?' '(' Expr ',' Expr ')'
 Number  ::= [0-9]+
 Id      ::= [a-z]+
 

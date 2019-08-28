@@ -13,6 +13,9 @@ data Expr
   | Add Expr Expr
   | Mul Expr Expr
   | Div Expr Expr
+  | Equal Expr Expr
+  | Greater Expr Expr
+  | Less Expr Expr
   deriving Show
 
 type Number = Integer
