@@ -7,17 +7,37 @@
 ;; symbol? lc-exp? . -> . boolean?
 ;;
 ;; Returns #t if the symbol var occurs free in exp, otherwise returns #f.
+
+;; The book's implementation
+;(define (occurs-free? var exp)
+;  (cond
+;    [(symbol? exp) (symbol=? var exp)]
+;    [(eq? (car exp) 'lambda)
+;     (and
+;      (not (symbol=? var (caadr exp)))
+;      (occurs-free? var (caddr exp)))]
+;    [else
+;     (or
+;      (occurs-free? var (car exp))
+;      (occurs-free? var (cadr exp)))]))
+
+;; An alternative implementation using match
 (define (occurs-free? var exp)
-  (cond
-    [(symbol? exp) (symbol=? var exp)]
-    [(eq? (car exp) 'lambda)
+  (match exp
+    ;; Identifier
+    [(? symbol? x) (symbol=? var x)]
+
+    ;; (lambda (Identifier) LcExp)
+    [`(lambda (,x) ,body)
      (and
-      (not (symbol=? var (caadr exp)))
-      (occurs-free? var (caddr exp)))]
-    [else
+      (not (symbol=? var x))
+      (occurs-free? var body))]
+
+    ;; (LcExp LcExp)
+    [`(,f ,arg)
      (or
-      (occurs-free? var (car exp))
-      (occurs-free? var (cadr exp)))]))
+      (occurs-free? var f)
+      (occurs-free? var arg))]))
 
 (module+ test
   (require rackunit)
