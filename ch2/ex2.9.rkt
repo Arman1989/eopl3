@@ -1,8 +1,15 @@
 #lang racket
 
-(define (empty-env) '())
+;; Exercise 2.9
+;;
+;; Add an observer called has-binding? and
+;; implement it using the a-list representation.
 
-(define (empty-env? env) (null? env))
+(define (empty-env)
+  '())
+
+(define (empty-env? env)
+  (null? env))
 
 (define (extend-env var val env)
   (cons (cons var val) env))
@@ -35,6 +42,7 @@
                 (extend-env
                  'y 14
                  (empty-env)))))])
+
     (check-eq? (apply-env env 'd) 6)
     (check-eq? (apply-env env 'y) 8)
     (check-eq? (apply-env env 'x) 7)

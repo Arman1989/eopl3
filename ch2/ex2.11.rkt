@@ -1,8 +1,14 @@
 #lang racket
 
-(define (empty-env) '())
+;; Exercise 2.11
+;;
+;; Implement the environment interface using the ribcage representation.
 
-(define (empty-env? env) (null? env))
+(define (empty-env)
+  '())
+
+(define (empty-env? env)
+  (null? env))
 
 (define (extend-env var val env)
   (cons (cons (list var) (list val)) env))
@@ -46,6 +52,7 @@
                 (extend-env
                  'y 14
                  (empty-env)))))])
+
     (check-eq? (apply-env env 'd) 6)
     (check-eq? (apply-env env 'y) 8)
     (check-eq? (apply-env env 'x) 7)

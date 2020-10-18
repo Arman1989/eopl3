@@ -1,14 +1,24 @@
 #lang racket
 
+;; Exercise 2.1
+
 (module+ test
   (require rackunit))
 
 ;; 1. Implement the four required operations for bigits.
+;;
+;; zero
+;; is-zero?
+;; successor
+;; predecessor
 
 (define N (make-parameter 16))
 
-(define (zero) '())
-(define (is-zero? n) (null? n))
+(define (zero)
+  '())
+
+(define (is-zero? n)
+  (null? n))
 
 (define (successor n)
   (if (null? n)
@@ -96,20 +106,20 @@
 
 ;; 2. Calculate the factorial of 10.
 
-(define (add a b)
-  (if (is-zero? a)
-      b
-      (successor (add (predecessor a) b))))
+(define (fact n)
+  (if (is-zero? n)
+      (successor n)
+      (mul (fact (predecessor n)) n)))
 
 (define (mul a b)
   (if (is-zero? a)
       (zero)
       (add b (mul (predecessor a) b))))
 
-(define (fact n)
-  (if (is-zero? n)
-      (successor n)
-      (mul (fact (predecessor n)) n)))
+(define (add a b)
+  (if (is-zero? a)
+      b
+      (successor (add (predecessor a) b))))
 
 (module+ test
   (check-equal?
@@ -141,11 +151,11 @@
    (to-bigit 3628800)))
 
 ;; 3. How does the execution time vary as the argument to fact changes?
-
+;;
 ;; As n increases, the execution time of (fact n) increases.
 
 ;; 4. How does the execution time vary as the base changes?
-
+;;
 ;; As the base increases fewer bigits will be needed to represent the same
 ;; number. Since the execution time varies based on the length of the list
 ;; of bigits used to represent the number the execution time decreases.

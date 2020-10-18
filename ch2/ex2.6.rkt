@@ -10,7 +10,8 @@
 ;;    the non-empty environment is represented as
 ;;    (var_1 val_1 var_2 val_2 ... var_n val_n).
 
-(define (a-empty-env) '())
+(define (a-empty-env)
+  '())
 
 (define (a-extend-env var val env)
   (cons var (cons val env)))
@@ -33,6 +34,7 @@
                 (a-extend-env
                  'y 14
                  (a-empty-env)))))])
+
     (check-eq? (a-apply-env env 'd) 6)
     (check-eq? (a-apply-env env 'y) 8)
     (check-eq? (a-apply-env env 'x) 7)
@@ -41,16 +43,16 @@
 
 ;; b. Using a hash table.
 
-(define (b-empty-env) (hash))
+(define (b-empty-env)
+  (hash))
 
 (define (b-extend-env var val env)
   (hash-set env var val))
 
 (define (b-apply-env env search-var)
-  (hash-ref
-   env
-   search-var
-   (lambda () (error 'b-apply-env "No binding for ~s" search-var))))
+  (hash-ref env
+            search-var
+            (lambda () (error 'b-apply-env "No binding for ~s" search-var))))
 
 (module+ test
   (let ([env (b-extend-env
@@ -62,6 +64,7 @@
                 (b-extend-env
                  'y 14
                  (b-empty-env)))))])
+
     (check-eq? (b-apply-env env 'd) 6)
     (check-eq? (b-apply-env env 'y) 8)
     (check-eq? (b-apply-env env 'x) 7)
@@ -71,7 +74,8 @@
 ;; c. The empty environment is represented as the empty list, and
 ;;    the non-empty environment is represented as a function.
 
-(define (c-empty-env) '())
+(define (c-empty-env)
+  '())
 
 (define (c-extend-env saved-var val env)
   (lambda (search-var)
@@ -94,6 +98,7 @@
                 (c-extend-env
                  'y 14
                  (c-empty-env)))))])
+
     (check-eq? (c-apply-env env 'd) 6)
     (check-eq? (c-apply-env env 'y) 8)
     (check-eq? (c-apply-env env 'x) 7)

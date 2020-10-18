@@ -1,11 +1,19 @@
 #lang racket
 
+;; Exercise 2.3
+;;
+;; Define a representation of all the integers (negative and nonnegative)
+;; as diff-trees, where a diff-tree is a list defined by the grammar
+;;
 ;; Diff-tree ::= (one) | (diff Diff-tree Diff-tree)
 
 ;; 2. Turn the Diff-tree representation into an implementation of the integers.
 
-(define (zero) '(diff (one) (one)))
-(define (is-zero? n) (zero? (reduce n)))
+(define (zero)
+  '(diff (one) (one)))
+
+(define (is-zero? n)
+  (zero? (reduce n)))
 
 (define (successor n)
   `(diff ,n (diff (diff (one) (one)) (one))))
