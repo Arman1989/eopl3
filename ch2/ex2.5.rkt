@@ -4,6 +4,8 @@
 ;;
 ;; Implement environments using an a-list or association list representation.
 
+(provide empty-env extend-env apply-env)
+
 (define (empty-env)
   '())
 
