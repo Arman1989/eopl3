@@ -18,6 +18,12 @@
 ;;
 ;;            ::= zero?(Expression)
 ;;
+;;            ::= equal?(Expression, Expression)
+;;
+;;            ::= greater?(Expression, Expression)
+;;
+;;            ::= less?(Expression, Expression)
+;;
 ;;            ::= if Expression then Expression else Expression
 ;;
 ;;            ::= let Identifier = Expression in Expression
@@ -37,6 +43,9 @@
  div-exp
  minus-exp
  zero?-exp
+ equal?-exp
+ greater?-exp
+ less?-exp
  if-exp
  let-exp
 
@@ -75,6 +84,15 @@
 
     (expression ("zero?" "(" expression ")")
                 zero?-exp)
+
+    (expression ("equal?" "(" expression "," expression ")")
+                equal?-exp)
+
+    (expression ("greater?" "(" expression "," expression ")")
+                greater?-exp)
+
+    (expression ("less?" "(" expression "," expression ")")
+                less?-exp)
 
     (expression ("if" expression "then" expression "else" expression)
                 if-exp)

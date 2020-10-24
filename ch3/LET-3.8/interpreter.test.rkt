@@ -88,3 +88,15 @@ LET
 (check-exn
  #rx"division by 0 is undefined"
  (lambda () (run "div(6, 0)")))
+
+(check-equal?
+ (run "equal?(1, 2)")
+ (bool-val #f))
+
+(check-equal?
+ (run "greater?(1, 2)")
+ (bool-val #f))
+
+(check-equal?
+ (run "less?(1, 2)")
+ (bool-val #t))

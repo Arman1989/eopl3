@@ -49,3 +49,18 @@
  (parse "div(6, 2)")
  (a-program (div-exp (const-exp 6)
                      (const-exp 2))))
+
+(check-equal?
+ (parse "equal?(1, 2)")
+ (a-program (equal?-exp (const-exp 1)
+                        (const-exp 2))))
+
+(check-equal?
+ (parse "greater?(1, 2)")
+ (a-program (greater?-exp (const-exp 1)
+                          (const-exp 2))))
+
+(check-equal?
+ (parse "less?(1, 2)")
+ (a-program (less?-exp (const-exp 1)
+                       (const-exp 2))))

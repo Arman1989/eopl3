@@ -74,6 +74,27 @@
                      (bool-val #t)
                      (bool-val #f)))]
 
+    [equal?-exp (exp1 exp2)
+                (let ([val1 (value-of-exp exp1 env)]
+                      [val2 (value-of-exp exp2 env)])
+                  (bool-val
+                   (= (expval->num val1)
+                      (expval->num val2))))]
+
+    [greater?-exp (exp1 exp2)
+                  (let ([val1 (value-of-exp exp1 env)]
+                        [val2 (value-of-exp exp2 env)])
+                    (bool-val
+                     (> (expval->num val1)
+                        (expval->num val2))))]
+
+    [less?-exp (exp1 exp2)
+               (let ([val1 (value-of-exp exp1 env)]
+                     [val2 (value-of-exp exp2 env)])
+                 (bool-val
+                  (< (expval->num val1)
+                     (expval->num val2))))]
+
     [if-exp (exp1 exp2 exp3)
             (let ([val1 (value-of-exp exp1 env)])
               (if (expval->bool val1)
