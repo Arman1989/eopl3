@@ -64,3 +64,7 @@ in let y = 2
 LET
   )
  (num-val -5))
+
+(check-equal?
+ (run "minus(-(minus(5), 9))")
+ (num-val 14))

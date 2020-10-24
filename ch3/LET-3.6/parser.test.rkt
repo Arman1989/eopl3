@@ -29,3 +29,8 @@
 (check-equal?
  (parse "let n=10 in -(n, 1)")
  (a-program (let-exp 'n (const-exp 10) (diff-exp (var-exp 'n) (const-exp 1)))))
+
+(check-equal?
+ (parse "minus(-(minus(5), 9))")
+ (a-program (minus-exp (diff-exp (minus-exp (const-exp 5))
+                                 (const-exp 9)))))

@@ -40,6 +40,11 @@
                  (- (expval->num val1)
                     (expval->num val2))))]
 
+    [minus-exp (exp1)
+               (let ([val1 (value-of-exp exp1 env)])
+                 (num-val
+                  (- (expval->num val1))))]
+
     [zero?-exp (exp1)
                (let ([val1 (value-of-exp exp1 env)])
                  (if (zero? (expval->num val1))
