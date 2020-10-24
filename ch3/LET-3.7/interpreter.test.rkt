@@ -68,3 +68,23 @@ LET
 (check-equal?
  (run "minus(-(minus(5), 9))")
  (num-val 14))
+
+(check-equal?
+ (run "add(6, 2)")
+ (num-val 8))
+
+(check-equal?
+ (run "mul(6, 2)")
+ (num-val 12))
+
+(check-equal?
+ (run "div(6, 2)")
+ (num-val 3))
+
+(check-equal?
+ (run "div(6, 4)")
+ (num-val 1))
+
+(check-exn
+ #rx"division by 0 is undefined"
+ (lambda () (run "div(6, 0)")))

@@ -6,7 +6,13 @@
 ;;
 ;;            ::= Identifier
 ;;
+;;            ::= add(Expression, Expression)
+;;
 ;;            ::= -(Expression, Expression)
+;;
+;;            ::= mul(Expression, Expression)
+;;
+;;            ::= div(Expression, Expression)
 ;;
 ;;            ::= minus(Expression)
 ;;
@@ -25,7 +31,10 @@
  expression
  const-exp
  var-exp
+ add-exp
  diff-exp
+ mul-exp
+ div-exp
  minus-exp
  zero?-exp
  if-exp
@@ -49,8 +58,17 @@
     (expression (identifier)
                 var-exp)
 
+    (expression ("add" "(" expression "," expression ")")
+                add-exp)
+
     (expression ("-" "(" expression "," expression ")")
                 diff-exp)
+
+    (expression ("mul" "(" expression "," expression ")")
+                mul-exp)
+
+    (expression ("div" "(" expression "," expression ")")
+                div-exp)
 
     (expression ("minus" "(" expression ")")
                 minus-exp)

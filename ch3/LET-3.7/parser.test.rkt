@@ -34,3 +34,18 @@
  (parse "minus(-(minus(5), 9))")
  (a-program (minus-exp (diff-exp (minus-exp (const-exp 5))
                                  (const-exp 9)))))
+
+(check-equal?
+ (parse "add(6, 2)")
+ (a-program (add-exp (const-exp 6)
+                     (const-exp 2))))
+
+(check-equal?
+ (parse "mul(6, 2)")
+ (a-program (mul-exp (const-exp 6)
+                     (const-exp 2))))
+
+(check-equal?
+ (parse "div(6, 2)")
+ (a-program (div-exp (const-exp 6)
+                     (const-exp 2))))

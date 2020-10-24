@@ -33,12 +33,35 @@
     [var-exp (var)
              (apply-env env var)]
 
+    [add-exp (exp1 exp2)
+             (let ([val1 (value-of-exp exp1 env)]
+                   [val2 (value-of-exp exp2 env)])
+               (num-val
+                (+ (expval->num val1)
+                   (expval->num val2))))]
+
     [diff-exp (exp1 exp2)
               (let ([val1 (value-of-exp exp1 env)]
                     [val2 (value-of-exp exp2 env)])
                 (num-val
                  (- (expval->num val1)
                     (expval->num val2))))]
+
+    [mul-exp (exp1 exp2)
+             (let ([val1 (value-of-exp exp1 env)]
+                   [val2 (value-of-exp exp2 env)])
+               (num-val
+                (* (expval->num val1)
+                   (expval->num val2))))]
+
+    [div-exp (exp1 exp2)
+             (let ([val1 (value-of-exp exp1 env)]
+                   [val2 (value-of-exp exp2 env)])
+               (if (zero? (expval->num val2))
+                   (eopl:error 'div "division by 0 is undefined")
+                   (num-val
+                    (quotient (expval->num val1)
+                              (expval->num val2)))))]
 
     [minus-exp (exp1)
                (let ([val1 (value-of-exp exp1 env)])
