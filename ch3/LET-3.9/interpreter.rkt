@@ -6,7 +6,7 @@
 (provide
 
  ;; Expressed Values
- num-val bool-val
+ num-val bool-val list-val
 
  ;; Interpreter
  run)
@@ -95,6 +95,32 @@
                   (< (expval->num val1)
                      (expval->num val2))))]
 
+    [cons-exp (exp1 exp2)
+              (let ([val1 (value-of-exp exp1 env)]
+                    [val2 (value-of-exp exp2 env)])
+                (list-val
+                 (cons val1
+                       (expval->list val2))))]
+
+    [car-exp (exp1)
+             (let ([val1 (value-of-exp exp1 env)])
+               (if (null? (expval->list val1))
+                   (eopl:error 'car "List is empty")
+                   (car (expval->list val1))))]
+
+    [cdr-exp (exp1)
+             (let ([val1 (value-of-exp exp1 env)])
+               (if (null? (expval->list val1))
+                   (eopl:error 'cdr "List is empty")
+                   (list-val (cdr (expval->list val1)))))]
+
+    [null?-exp (exp1)
+               (let ([val1 (value-of-exp exp1 env)])
+                 (bool-val (null? (expval->list val1))))]
+
+    [emptylist-exp ()
+                   (list-val '())]
+
     [if-exp (exp1 exp2 exp3)
             (let ([val1 (value-of-exp exp1 env)])
               (if (expval->bool val1)
@@ -112,7 +138,8 @@
 
 (define-datatype expval expval?
   [num-val (n number?)]
-  [bool-val (b boolean?)])
+  [bool-val (b boolean?)]
+  [list-val (l list?)])
 
 (define (expval->num val)
   (cases expval val
@@ -123,3 +150,8 @@
   (cases expval val
     [bool-val (b) b]
     [else (eopl:error 'expval->bool "Not a boolean: ~s" val)]))
+
+(define (expval->list val)
+  (cases expval val
+    [list-val (l) l]
+    [else (eopl:error 'expval->list "Not a list: ~s" val)]))

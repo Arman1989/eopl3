@@ -100,3 +100,45 @@ LET
 (check-equal?
  (run "less?(1, 2)")
  (bool-val #t))
+
+(check-equal?
+ (run "emptylist")
+ (list-val '()))
+
+(check-equal?
+ (run "cons(5, emptylist)")
+ (list-val (list (num-val 5))))
+
+(check-equal?
+ (run "car(cons(x, emptylist))")
+ (num-val 10))
+
+(check-equal?
+ (run "cdr(cons(x, emptylist))")
+ (list-val '()))
+
+(check-equal?
+ (run "if null?(emptylist) then 0 else 1")
+ (num-val 0))
+
+(check-equal?
+ (run
+  #<<LET
+let x = 4
+in cons(x,
+        cons(cons(-(x, 1),
+                  emptylist),
+             emptylist))
+LET
+  )
+ ; (4 (3))
+ (list-val (list (num-val 4)
+                 (list-val (list (num-val 3))))))
+
+(check-exn
+ #rx"Not a list"
+ (lambda () (run "car(1)")))
+
+(check-exn
+ #rx"List is empty"
+ (lambda () (run "car(emptylist)")))
