@@ -34,6 +34,8 @@
 ;;
 ;;            ::= emptylist
 ;;
+;;            ::= list({Expression}*(,))
+;;
 ;;            ::= if Expression then Expression else Expression
 ;;
 ;;            ::= let Identifier = Expression in Expression
@@ -61,6 +63,7 @@
  cdr-exp
  null?-exp
  emptylist-exp
+ list-exp
  if-exp
  let-exp
 
@@ -123,6 +126,9 @@
 
     (expression ("emptylist")
                 emptylist-exp)
+
+    (expression ("list" "(" (separated-list expression ",") ")")
+                list-exp)
 
     (expression ("if" expression "then" expression "else" expression)
                 if-exp)

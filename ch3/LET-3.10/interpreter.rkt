@@ -121,6 +121,11 @@
     [emptylist-exp ()
                    (list-val '())]
 
+    [list-exp (exps)
+              (list-val (map (lambda (exp)
+                               (value-of-exp exp env))
+                             exps))]
+
     [if-exp (exp1 exp2 exp3)
             (let ([val1 (value-of-exp exp1 env)])
               (if (expval->bool val1)

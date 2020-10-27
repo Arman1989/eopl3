@@ -142,3 +142,23 @@ LET
 (check-exn
  #rx"List is empty"
  (lambda () (run "car(emptylist)")))
+
+(check-equal?
+ (run "list()")
+ (list-val '()))
+
+(check-equal?
+ (run "list(1)")
+ (list-val (list (num-val 1))))
+
+(check-equal?
+ (run
+  #<<LET
+let x = 4
+in list(x, -(x, 1), -(x, 3))
+LET
+  )
+ ; (4 3 1)
+ (list-val (list (num-val 4)
+                 (num-val 3)
+                 (num-val 1))))
