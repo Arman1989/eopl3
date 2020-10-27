@@ -162,3 +162,27 @@ LET
  (list-val (list (num-val 4)
                  (num-val 3)
                  (num-val 1))))
+
+(check-exn
+ #rx"No condition is satisfied"
+ (lambda () (run "cond end")))
+
+(check-exn
+ #rx"No condition is satisfied"
+ (lambda () (run "cond zero?(1) ==> 1 zero?(2) ==> 2 end")))
+
+(check-exn
+ #rx"Not a boolean"
+ (lambda () (run "cond 1 ==> 1 end")))
+
+(check-equal?
+ (run
+  #<<LET
+cond
+  equal?(x, i)   ==> 1
+  greater?(x, i) ==> 2
+  less?(x, i)    ==> 3
+end
+LET
+  )
+ (num-val 2))

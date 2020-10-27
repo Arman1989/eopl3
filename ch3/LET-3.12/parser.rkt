@@ -38,6 +38,8 @@
 ;;
 ;;            ::= if Expression then Expression else Expression
 ;;
+;;            ::= cond {Expression ==> Expression}* end
+;;
 ;;            ::= let Identifier = Expression in Expression
 
 (provide
@@ -65,6 +67,7 @@
  emptylist-exp
  list-exp
  if-exp
+ cond-exp
  let-exp
 
  ;; Parser
@@ -132,6 +135,9 @@
 
     (expression ("if" expression "then" expression "else" expression)
                 if-exp)
+
+    (expression ("cond" (arbno expression "==>" expression) "end")
+                cond-exp)
 
     (expression ("let" identifier "=" expression "in" expression)
                 let-exp)))

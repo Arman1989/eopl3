@@ -132,6 +132,16 @@
                   (value-of-exp exp2 env)
                   (value-of-exp exp3 env)))]
 
+    [cond-exp (conditions exps)
+              (if (null? conditions)
+                  (eopl:error 'cond "No condition is satisfied")
+                  (let ([val1 (value-of-exp (car conditions) env)])
+                    (if (expval->bool val1)
+                        (value-of-exp (car exps) env)
+                        (value-of-exp (cond-exp (cdr conditions)
+                                                (cdr exps))
+                                      env))))]
+
     [let-exp (var exp1 body)
              (let ([val1 (value-of-exp exp1 env)])
                (value-of-exp body (extend-env var val1 env)))]))

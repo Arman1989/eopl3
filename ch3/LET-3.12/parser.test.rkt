@@ -105,3 +105,25 @@
                                     (var-exp 'x)
                                     (diff-exp (const-exp 0)
                                               (var-exp 'x)))))))
+
+(check-equal?
+ (parse "cond end")
+ (a-program (cond-exp '() '())))
+
+(check-equal?
+ (parse
+  #<<LET
+cond
+  equal?(x, i)   ==> 1
+  greater?(x, i) ==> 2
+  less?(x, i)    ==> 3
+end
+LET
+  )
+ (a-program (cond-exp
+             (list (equal?-exp (var-exp 'x) (var-exp 'i))
+                   (greater?-exp (var-exp 'x) (var-exp 'i))
+                   (less?-exp (var-exp 'x) (var-exp 'i)))
+             (list (const-exp 1)
+                   (const-exp 2)
+                   (const-exp 3)))))
