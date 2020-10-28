@@ -16,17 +16,17 @@
 ;;
 ;;            ::= minus(Expression)
 ;;
-;;            ::= zero?(Expression)
+;;            ::= if Bool-exp then Expression else Expression
+;;
+;;            ::= let Identifier = Expression in Expression
+;;
+;; Bool-exp   ::= zero?(Expression)
 ;;
 ;;            ::= equal?(Expression, Expression)
 ;;
 ;;            ::= greater?(Expression, Expression)
 ;;
 ;;            ::= less?(Expression, Expression)
-;;
-;;            ::= if Expression then Expression else Expression
-;;
-;;            ::= let Identifier = Expression in Expression
 
 (provide
 
@@ -42,12 +42,14 @@
  mul-exp
  div-exp
  minus-exp
+ if-exp
+ let-exp
+
+ bool-exp
  zero?-exp
  equal?-exp
  greater?-exp
  less?-exp
- if-exp
- let-exp
 
  ;; Parser
  parse)
@@ -82,23 +84,23 @@
     (expression ("minus" "(" expression ")")
                 minus-exp)
 
-    (expression ("zero?" "(" expression ")")
-                zero?-exp)
-
-    (expression ("equal?" "(" expression "," expression ")")
-                equal?-exp)
-
-    (expression ("greater?" "(" expression "," expression ")")
-                greater?-exp)
-
-    (expression ("less?" "(" expression "," expression ")")
-                less?-exp)
-
-    (expression ("if" expression "then" expression "else" expression)
+    (expression ("if" bool-exp "then" expression "else" expression)
                 if-exp)
 
     (expression ("let" identifier "=" expression "in" expression)
-                let-exp)))
+                let-exp)
+
+    (bool-exp ("zero?" "(" expression ")")
+              zero?-exp)
+
+    (bool-exp ("equal?" "(" expression "," expression ")")
+              equal?-exp)
+
+    (bool-exp ("greater?" "(" expression "," expression ")")
+              greater?-exp)
+
+    (bool-exp ("less?" "(" expression "," expression ")")
+              less?-exp)))
 
 (sllgen:make-define-datatypes scanner-spec grammar)
 

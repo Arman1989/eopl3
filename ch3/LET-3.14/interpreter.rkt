@@ -5,19 +5,21 @@
 
 (provide
 
- ;; Expressed Values
- num-val bool-val
-
  ;; Interpreter
  run)
 
+;; Values
+;;
+;; ExpVal = Int
+;; DenVal = ExpVal
+
 (define (run s)
   (let ([init-env (extend-env
-                   'i (num-val 1)
+                   'i 1
                    (extend-env
-                    'v (num-val 5)
+                    'v 5
                     (extend-env
-                     'x (num-val 10)
+                     'x 10
                      (empty-env))))])
     (value-of-program (parse s) init-env)))
 
@@ -27,8 +29,7 @@
 
 (define (value-of-exp exp env)
   (cases expression exp
-    [const-exp (n)
-               (num-val n)]
+    [const-exp (n) n]
 
     [var-exp (var)
              (apply-env env var)]
@@ -36,68 +37,32 @@
     [add-exp (exp1 exp2)
              (let ([val1 (value-of-exp exp1 env)]
                    [val2 (value-of-exp exp2 env)])
-               (num-val
-                (+ (expval->num val1)
-                   (expval->num val2))))]
+               (+ val1 val2))]
 
     [diff-exp (exp1 exp2)
               (let ([val1 (value-of-exp exp1 env)]
                     [val2 (value-of-exp exp2 env)])
-                (num-val
-                 (- (expval->num val1)
-                    (expval->num val2))))]
+                (- val1 val2))]
 
     [mul-exp (exp1 exp2)
              (let ([val1 (value-of-exp exp1 env)]
                    [val2 (value-of-exp exp2 env)])
-               (num-val
-                (* (expval->num val1)
-                   (expval->num val2))))]
+               (* val1 val2))]
 
     [div-exp (exp1 exp2)
              (let ([val1 (value-of-exp exp1 env)]
                    [val2 (value-of-exp exp2 env)])
-               (if (zero? (expval->num val2))
+               (if (zero? val2)
                    (eopl:error 'div "division by 0 is undefined")
-                   (num-val
-                    (quotient (expval->num val1)
-                              (expval->num val2)))))]
+                   (quotient val1 val2)))]
 
     [minus-exp (exp1)
                (let ([val1 (value-of-exp exp1 env)])
-                 (num-val
-                  (- (expval->num val1))))]
-
-    [zero?-exp (exp1)
-               (let ([val1 (value-of-exp exp1 env)])
-                 (if (zero? (expval->num val1))
-                     (bool-val #t)
-                     (bool-val #f)))]
-
-    [equal?-exp (exp1 exp2)
-                (let ([val1 (value-of-exp exp1 env)]
-                      [val2 (value-of-exp exp2 env)])
-                  (bool-val
-                   (= (expval->num val1)
-                      (expval->num val2))))]
-
-    [greater?-exp (exp1 exp2)
-                  (let ([val1 (value-of-exp exp1 env)]
-                        [val2 (value-of-exp exp2 env)])
-                    (bool-val
-                     (> (expval->num val1)
-                        (expval->num val2))))]
-
-    [less?-exp (exp1 exp2)
-               (let ([val1 (value-of-exp exp1 env)]
-                     [val2 (value-of-exp exp2 env)])
-                 (bool-val
-                  (< (expval->num val1)
-                     (expval->num val2))))]
+                 (- val1))]
 
     [if-exp (exp1 exp2 exp3)
-            (let ([val1 (value-of-exp exp1 env)])
-              (if (expval->bool val1)
+            (let ([val1 (value-of-bool-exp exp1 env)])
+              (if val1
                   (value-of-exp exp2 env)
                   (value-of-exp exp3 env)))]
 
@@ -105,21 +70,23 @@
              (let ([val1 (value-of-exp exp1 env)])
                (value-of-exp body (extend-env var val1 env)))]))
 
-;; Values
-;;
-;; ExpVal = Int + Bool
-;; DenVal = ExpVal
+(define (value-of-bool-exp exp env)
+  (cases bool-exp exp
+    [zero?-exp (exp1)
+               (let ([val1 (value-of-exp exp1 env)])
+                 (zero? val1))]
 
-(define-datatype expval expval?
-  [num-val (n number?)]
-  [bool-val (b boolean?)])
+    [equal?-exp (exp1 exp2)
+                (let ([val1 (value-of-exp exp1 env)]
+                      [val2 (value-of-exp exp2 env)])
+                  (= val1 val2))]
 
-(define (expval->num val)
-  (cases expval val
-    [num-val (n) n]
-    [else (eopl:error 'expval->num "Not a number: ~s" val)]))
+    [greater?-exp (exp1 exp2)
+                  (let ([val1 (value-of-exp exp1 env)]
+                        [val2 (value-of-exp exp2 env)])
+                    (> val1 val2))]
 
-(define (expval->bool val)
-  (cases expval val
-    [bool-val (b) b]
-    [else (eopl:error 'expval->bool "Not a boolean: ~s" val)]))
+    [less?-exp (exp1 exp2)
+               (let ([val1 (value-of-exp exp1 env)]
+                     [val2 (value-of-exp exp2 env)])
+                 (< val1 val2))]))

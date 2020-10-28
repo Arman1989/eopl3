@@ -17,8 +17,10 @@
  (a-program (diff-exp (const-exp 5) (var-exp 'y))))
 
 (check-equal?
- (parse "zero?(z)")
- (a-program (zero?-exp (var-exp 'z))))
+ (parse "if zero?(z) then 1 else 0")
+ (a-program (if-exp (zero?-exp (var-exp 'z))
+                    (const-exp 1)
+                    (const-exp 0))))
 
 (check-equal?
  (parse "if zero?(2) then 0 else 1")
@@ -51,16 +53,19 @@
                      (const-exp 2))))
 
 (check-equal?
- (parse "equal?(1, 2)")
- (a-program (equal?-exp (const-exp 1)
-                        (const-exp 2))))
+ (parse "if equal?(1, 2) then 5 else 10")
+ (a-program (if-exp (equal?-exp (const-exp 1) (const-exp 2))
+                    (const-exp 5)
+                    (const-exp 10))))
 
 (check-equal?
- (parse "greater?(1, 2)")
- (a-program (greater?-exp (const-exp 1)
-                          (const-exp 2))))
+ (parse "if greater?(1, 2) then 5 else 10")
+ (a-program (if-exp (greater?-exp (const-exp 1) (const-exp 2))
+                    (const-exp 5)
+                    (const-exp 10))))
 
 (check-equal?
- (parse "less?(1, 2)")
- (a-program (less?-exp (const-exp 1)
-                       (const-exp 2))))
+ (parse "if less?(1, 2) then 5 else 10")
+ (a-program (if-exp (less?-exp (const-exp 1) (const-exp 2))
+                    (const-exp 5)
+                    (const-exp 10))))
