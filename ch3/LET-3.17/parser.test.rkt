@@ -50,6 +50,23 @@ LET
                                         (var-exp 'y))))))
 
 (check-equal?
+ (parse
+  #<<LET
+let x = 30
+in let* x = -(x,1)
+        y = -(x,2)
+   in -(x,y)
+LET
+  )
+ (a-program (let-exp (list 'x)
+                     (list (const-exp 30))
+                     (let*-exp (list 'x 'y)
+                               (list (diff-exp (var-exp 'x) (const-exp 1))
+                                     (diff-exp (var-exp 'x) (const-exp 2)))
+                               (diff-exp (var-exp 'x)
+                                         (var-exp 'y))))))
+
+(check-equal?
  (parse "minus(-(minus(5), 9))")
  (a-program (minus-exp (diff-exp (minus-exp (const-exp 5))
                                  (const-exp 9)))))

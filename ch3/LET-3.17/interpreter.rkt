@@ -143,7 +143,10 @@
                                       env))))]
 
     [let-exp (vars exps body)
-             (value-of-exp body (extend-env-multi vars exps env))]))
+             (value-of-exp body (extend-env-multi vars exps env))]
+
+    [let*-exp (vars exps body)
+              (value-of-exp body (extend-env-multi* vars exps env))]))
 
 (define (extend-env-multi vars exps base-env)
   (define (go vars exps env)
@@ -155,6 +158,15 @@
                         (value-of-exp (car exps) base-env)
                         env))))
   (go vars exps base-env))
+
+(define (extend-env-multi* vars exps env)
+  (if (null? vars)
+      env
+      (extend-env-multi* (cdr vars)
+                         (cdr exps)
+                         (extend-env (car vars)
+                                     (value-of-exp (car exps) env)
+                                     env))))
 
 ;; Values
 ;;
