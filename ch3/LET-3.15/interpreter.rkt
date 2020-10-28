@@ -144,7 +144,31 @@
 
     [let-exp (var exp1 body)
              (let ([val1 (value-of-exp exp1 env)])
-               (value-of-exp body (extend-env var val1 env)))]))
+               (value-of-exp body (extend-env var val1 env)))]
+
+    [print-exp (exp1)
+               (let ([val1 (value-of-exp exp1 env)])
+                 (display-expval val1)
+                 (display "\n")
+                 (num-val 1))]))
+
+(define (display-expval val)
+  (cases expval val
+    [num-val (n) (display n)]
+    [bool-val (b) (display b)]
+    [list-val (l) (display-list l)]))
+
+(define (display-list l)
+  (display "(")
+  (display-list-elements l)
+  (display ")"))
+
+(define (display-list-elements l)
+  (if (null? l)
+      (display "")
+      (begin (display-expval (car l))
+             (if (null? (cdr l)) (display "") (display " "))
+             (display-list-elements (cdr l)))))
 
 ;; Values
 ;;

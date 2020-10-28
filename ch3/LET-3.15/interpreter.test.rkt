@@ -186,3 +186,30 @@ end
 LET
   )
  (num-val 2))
+
+(let ([out (open-output-string)])
+  (parameterize ([current-output-port out])
+    (check-equal?
+     (run "print(1)")
+     (num-val 1))
+    (check-equal?
+     (get-output-string out)
+     "1\n")))
+
+(let ([out (open-output-string)])
+  (parameterize ([current-output-port out])
+    (check-equal?
+     (run "print(zero?(1))")
+     (num-val 1))
+    (check-equal?
+     (get-output-string out)
+     "#f\n")))
+
+(let ([out (open-output-string)])
+  (parameterize ([current-output-port out])
+    (check-equal?
+     (run "print(list(1, zero?(0), list(), list(2), print(3)))")
+     (num-val 1))
+    (check-equal?
+     (get-output-string out)
+     "3\n(1 #t () (2) 1)\n")))

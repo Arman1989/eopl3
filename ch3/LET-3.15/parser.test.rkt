@@ -127,3 +127,7 @@ LET
              (list (const-exp 1)
                    (const-exp 2)
                    (const-exp 3)))))
+
+(check-equal?
+ (parse "print(5)")
+ (a-program (print-exp (const-exp 5))))

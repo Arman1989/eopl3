@@ -41,6 +41,8 @@
 ;;            ::= cond {Expression ==> Expression}* end
 ;;
 ;;            ::= let Identifier = Expression in Expression
+;;
+;;            ::= print(Expression)
 
 (provide
 
@@ -69,6 +71,7 @@
  if-exp
  cond-exp
  let-exp
+ print-exp
 
  ;; Parser
  parse)
@@ -140,7 +143,10 @@
                 cond-exp)
 
     (expression ("let" identifier "=" expression "in" expression)
-                let-exp)))
+                let-exp)
+
+    (expression ("print" "(" expression ")")
+                print-exp)))
 
 (sllgen:make-define-datatypes scanner-spec grammar)
 
