@@ -40,7 +40,7 @@
 ;;
 ;;            ::= cond {Expression ==> Expression}* end
 ;;
-;;            ::= let Identifier = Expression in Expression
+;;            ::= let {Identifier = Expression}* in Expression
 
 (provide
 
@@ -139,7 +139,7 @@
     (expression ("cond" (arbno expression "==>" expression) "end")
                 cond-exp)
 
-    (expression ("let" identifier "=" expression "in" expression)
+    (expression ("let" (arbno identifier "=" expression) "in" expression)
                 let-exp)))
 
 (sllgen:make-define-datatypes scanner-spec grammar)

@@ -66,6 +66,17 @@ LET
  (num-val -5))
 
 (check-equal?
+ (run
+  #<<LET
+let x = 30
+in let x = -(x,1)
+       y = -(x,2)
+   in -(x,y)
+LET
+  )
+ (num-val 1))
+
+(check-equal?
  (run "minus(-(minus(5), 9))")
  (num-val 14))
 
