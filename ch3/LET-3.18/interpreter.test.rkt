@@ -208,3 +208,35 @@ end
 LET
   )
  (num-val 2))
+
+(check-equal?
+ (run
+  #<<LET
+let u = 7
+in unpack x y = cons(u, cons(3, emptylist))
+   in -(x, y)
+LET
+  )
+ (num-val 4))
+
+(check-exn
+ #rx"The number of variables and values don't match"
+ (lambda ()
+   (run
+    #<<LET
+let u = 7
+in unpack x y z = cons(u, cons(3, emptylist))
+   in -(x, y)
+LET
+    )))
+
+(check-exn
+ #rx"Not a list"
+ (lambda ()
+   (run
+    #<<LET
+let u = 7
+in unpack x y = i
+   in -(x, y)
+LET
+    )))

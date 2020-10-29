@@ -163,3 +163,15 @@ LET
              (list (const-exp 1)
                    (const-exp 2)
                    (const-exp 3)))))
+
+(check-equal?
+ (parse "unpack = l in x")
+ (a-program (unpack-exp '()
+                        (var-exp 'l)
+                        (var-exp 'x))))
+
+(check-equal?
+ (parse "unpack x y = l in x")
+ (a-program (unpack-exp '(x y)
+                        (var-exp 'l)
+                        (var-exp 'x))))

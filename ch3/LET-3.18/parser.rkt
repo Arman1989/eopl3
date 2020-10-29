@@ -36,6 +36,8 @@
 ;;
 ;;            ::= list({Expression}*(,))
 ;;
+;;            ::= unpack {Identifier}* = Expression in Expression
+;;
 ;;            ::= if Expression then Expression else Expression
 ;;
 ;;            ::= cond {Expression ==> Expression}* end
@@ -68,6 +70,7 @@
  null?-exp
  emptylist-exp
  list-exp
+ unpack-exp
  if-exp
  cond-exp
  let-exp
@@ -135,6 +138,9 @@
 
     (expression ("list" "(" (separated-list expression ",") ")")
                 list-exp)
+
+    (expression ("unpack" (arbno identifier) "=" expression "in" expression)
+                unpack-exp)
 
     (expression ("if" expression "then" expression "else" expression)
                 if-exp)

@@ -126,6 +126,13 @@
                                (value-of-exp exp env))
                              exps))]
 
+    [unpack-exp (vars exp1 body)
+                (let ([val1 (value-of-exp exp1 env)])
+                  (let ([vals (expval->list val1)])
+                    (if (= (length vars) (length vals))
+                        (value-of-exp body (extend-env-multi+ vars vals env))
+                        (eopl:error 'unpack "The number of variables and values don't match"))))]
+
     [if-exp (exp1 exp2 exp3)
             (let ([val1 (value-of-exp exp1 env)])
               (if (expval->bool val1)
@@ -166,6 +173,15 @@
                          (cdr exps)
                          (extend-env (car vars)
                                      (value-of-exp (car exps) env)
+                                     env))))
+
+(define (extend-env-multi+ vars vals env)
+  (if (null? vars)
+      env
+      (extend-env-multi+ (cdr vars)
+                         (cdr vals)
+                         (extend-env (car vars)
+                                     (car vals)
                                      env))))
 
 ;; Values
