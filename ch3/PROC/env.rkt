@@ -7,6 +7,7 @@
  extend-env
 
  ;; Query
+ env?
  apply-env)
 
 (define (empty-env)
@@ -14,6 +15,8 @@
 
 (define (extend-env var val env)
   (cons (cons var val) env))
+
+(define env? list?)
 
 (define (apply-env env search-var)
   (if (null? env)

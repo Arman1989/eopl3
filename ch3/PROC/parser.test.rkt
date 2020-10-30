@@ -175,3 +175,13 @@ LET
  (a-program (unpack-exp '(x y)
                         (var-exp 'l)
                         (var-exp 'x))))
+
+(check-equal?
+ (parse "proc (x) -(x, 1)")
+ (a-program (proc-exp 'x (diff-exp (var-exp 'x)
+                                   (const-exp 1)))))
+
+(check-equal?
+ (parse "(f x)")
+ (a-program (call-exp (var-exp 'f)
+                      (var-exp 'x))))

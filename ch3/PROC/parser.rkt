@@ -45,6 +45,10 @@
 ;;            ::= let {Identifier = Expression}* in Expression
 ;;
 ;;            ::= let* {Identifier = Expression}* in Expression
+;;
+;;            ::= proc (Identifier) Expression
+;;
+;;            ::= (Expression Expression)
 
 (provide
 
@@ -52,7 +56,7 @@
  program
  a-program
 
- expression
+ expression expression?
  const-exp
  var-exp
  add-exp
@@ -75,6 +79,8 @@
  cond-exp
  let-exp
  let*-exp
+ proc-exp
+ call-exp
 
  ;; Parser
  parse)
@@ -152,7 +158,13 @@
                 let-exp)
 
     (expression ("let*" (arbno identifier "=" expression) "in" expression)
-                let*-exp)))
+                let*-exp)
+
+    (expression ("proc" "(" identifier ")" expression)
+                proc-exp)
+
+    (expression ("(" expression expression ")")
+                call-exp)))
 
 (sllgen:make-define-datatypes scanner-spec grammar)
 

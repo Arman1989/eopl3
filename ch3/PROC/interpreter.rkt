@@ -153,7 +153,15 @@
              (value-of-exp body (extend-env-multi vars exps env))]
 
     [let*-exp (vars exps body)
-              (value-of-exp body (extend-env-multi* vars exps env))]))
+              (value-of-exp body (extend-env-multi* vars exps env))]
+
+    [proc-exp (var body)
+              (proc-val (procedure var body env))]
+
+    [call-exp (rator rand)
+              (let ([proc (expval->proc (value-of-exp rator env))]
+                    [arg (value-of-exp rand env)])
+                (apply-procedure proc arg))]))
 
 (define (extend-env-multi vars exps base-env)
   (define (go vars exps env)
@@ -184,15 +192,31 @@
                                      (car vals)
                                      env))))
 
+;; Procedure ADT
+
+(define-datatype proc proc?
+  [procedure
+   (var identifier?)
+   (body expression?)
+   (saved-env env?)])
+
+(define identifier? symbol?)
+
+(define (apply-procedure proc1 val)
+  (cases proc proc1
+    [procedure (var body saved-env)
+               (value-of-exp body (extend-env var val saved-env))]))
+
 ;; Values
 ;;
-;; ExpVal = Int + Bool
+;; ExpVal = Int + Bool + Proc
 ;; DenVal = ExpVal
 
 (define-datatype expval expval?
   [num-val (n number?)]
   [bool-val (b boolean?)]
-  [list-val (l list?)])
+  [list-val (l list?)]
+  [proc-val (p proc?)])
 
 (define (expval->num val)
   (cases expval val
@@ -208,3 +232,8 @@
   (cases expval val
     [list-val (l) l]
     [else (eopl:error 'expval->list "Not a list: ~s" val)]))
+
+(define (expval->proc val)
+  (cases expval val
+    [proc-val (p) p]
+    [else (eopl:error 'expval->proc "Not a procedure: ~s" val)]))

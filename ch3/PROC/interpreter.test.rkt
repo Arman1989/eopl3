@@ -240,3 +240,33 @@ in unpack x y = i
    in -(x, y)
 LET
     )))
+
+(check-equal?
+ (run
+  #<<PROC
+let f = proc (x) -(x, 11)
+in (f (f 77))
+PROC
+  )
+ (num-val 55))
+
+(check-equal?
+ (run
+  #<<PROC
+(proc (f) (f (f 77))
+ proc (x) -(x, 11))
+PROC
+  )
+ (num-val 55))
+
+(check-equal?
+ (run
+  #<<PROC
+let x = 200
+in let f = proc (z) -(z, x)
+   in let x = 100
+      in let g = proc (z) -(z, x)
+         in -((f 1), (g 1))
+PROC
+  )
+ (num-val -100))
