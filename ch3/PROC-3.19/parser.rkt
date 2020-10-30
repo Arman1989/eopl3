@@ -46,7 +46,7 @@
 ;;
 ;;            ::= let* {Identifier = Expression}* in Expression
 ;;
-;;            ::= proc (Identifier) Expression
+;;            ::= letproc Identifier (Identifier) = Expression in Expression
 ;;
 ;;            ::= (Expression Expression)
 
@@ -79,7 +79,7 @@
  cond-exp
  let-exp
  let*-exp
- proc-exp
+ letproc-exp
  call-exp
 
  ;; Parser
@@ -160,8 +160,8 @@
     (expression ("let*" (arbno identifier "=" expression) "in" expression)
                 let*-exp)
 
-    (expression ("proc" "(" identifier ")" expression)
-                proc-exp)
+    (expression ("letproc" identifier "(" identifier ")" "=" expression "in" expression)
+                letproc-exp)
 
     (expression ("(" expression expression ")")
                 call-exp)))

@@ -177,9 +177,14 @@ CODE
                         (var-exp 'x))))
 
 (check-equal?
- (parse "proc (x) -(x, 1)")
- (a-program (proc-exp 'x (diff-exp (var-exp 'x)
-                                   (const-exp 1)))))
+ (parse "letproc f (x) = -(x, 1) in (f 2)")
+ (a-program (letproc-exp
+             'f
+             'x
+             (diff-exp (var-exp 'x)
+                       (const-exp 1))
+             (call-exp (var-exp 'f)
+                       (const-exp 2)))))
 
 (check-equal?
  (parse "(f x)")

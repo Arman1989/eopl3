@@ -155,8 +155,9 @@
     [let*-exp (vars exps body)
               (value-of-exp body (extend-env-multi* vars exps env))]
 
-    [proc-exp (var body)
-              (proc-val (procedure var body env))]
+    [letproc-exp (name var proc-body body)
+                 (let ([val (proc-val (procedure var proc-body env))])
+                   (value-of-exp body (extend-env name val env)))]
 
     [call-exp (rator rand)
               (let ([proc (expval->proc (value-of-exp rator env))]
