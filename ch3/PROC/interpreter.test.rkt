@@ -270,3 +270,19 @@ in let f = proc (z) -(z, x)
 CODE
   )
  (num-val -100))
+
+;; Exercise 3.20
+;;
+;; Write a curried procedure that takes two arguments and returns their sum.
+
+(check-equal?
+ (run
+  #<<CODE
+let f = proc (x) proc (y) -(x, -(0, y))
+in let a = ((f 1) 2)
+   in let b = ((f a) 3)
+      in let c = ((f b) 4)
+         in let d = ((f c) 5) in d
+CODE
+  )
+ (num-val 15))
