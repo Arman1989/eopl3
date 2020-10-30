@@ -30,11 +30,11 @@
 
 (check-equal?
  (run
-  #<<LET
+  #<<CODE
 let x = 33
 in let y = 22
    in if zero?(-(x, 11)) then -(y, 2) else -(y, 4)
-LET
+CODE
   )
  (num-val 18))
 
@@ -44,46 +44,46 @@ LET
 
 (check-equal?
  (run
-  #<<LET
+  #<<CODE
 let z = 5
 in let x = 3
    in let y = -(x, 1)
       in let x = 4 in -(z, -(x, y))
-LET
+CODE
   )
  (num-val 3))
 
 (check-equal?
  (run
-  #<<LET
+  #<<CODE
 let x = 7
 in let y = 2
    in let y = let x = -(x, 1)
               in -(x, y)
       in -(-(x, 8), y)
-LET
+CODE
   )
  (num-val -5))
 
 (check-equal?
  (run
-  #<<LET
+  #<<CODE
 let x = 30
 in let x = -(x,1)
        y = -(x,2)
    in -(x,y)
-LET
+CODE
   )
  (num-val 1))
 
 (check-equal?
  (run
-  #<<LET
+  #<<CODE
 let x = 30
 in let* x = -(x,1)
         y = -(x,2)
    in -(x,y)
-LET
+CODE
   )
  (num-val 2))
 
@@ -145,13 +145,13 @@ LET
 
 (check-equal?
  (run
-  #<<LET
+  #<<CODE
 let x = 4
 in cons(x,
         cons(cons(-(x, 1),
                   emptylist),
              emptylist))
-LET
+CODE
   )
  ; (4 (3))
  (list-val (list (num-val 4)
@@ -175,10 +175,10 @@ LET
 
 (check-equal?
  (run
-  #<<LET
+  #<<CODE
 let x = 4
 in list(x, -(x, 1), -(x, 3))
-LET
+CODE
   )
  ; (4 3 1)
  (list-val (list (num-val 4)
@@ -199,23 +199,23 @@ LET
 
 (check-equal?
  (run
-  #<<LET
+  #<<CODE
 cond
   equal?(x, i)   ==> 1
   greater?(x, i) ==> 2
   less?(x, i)    ==> 3
 end
-LET
+CODE
   )
  (num-val 2))
 
 (check-equal?
  (run
-  #<<LET
+  #<<CODE
 let u = 7
 in unpack x y = cons(u, cons(3, emptylist))
    in -(x, y)
-LET
+CODE
   )
  (num-val 4))
 
@@ -223,50 +223,50 @@ LET
  #rx"The number of variables and values don't match"
  (lambda ()
    (run
-    #<<LET
+    #<<CODE
 let u = 7
 in unpack x y z = cons(u, cons(3, emptylist))
    in -(x, y)
-LET
+CODE
     )))
 
 (check-exn
  #rx"Not a list"
  (lambda ()
    (run
-    #<<LET
+    #<<CODE
 let u = 7
 in unpack x y = i
    in -(x, y)
-LET
+CODE
     )))
 
 (check-equal?
  (run
-  #<<PROC
+  #<<CODE
 let f = proc (x) -(x, 11)
 in (f (f 77))
-PROC
+CODE
   )
  (num-val 55))
 
 (check-equal?
  (run
-  #<<PROC
+  #<<CODE
 (proc (f) (f (f 77))
  proc (x) -(x, 11))
-PROC
+CODE
   )
  (num-val 55))
 
 (check-equal?
  (run
-  #<<PROC
+  #<<CODE
 let x = 200
 in let f = proc (z) -(z, x)
    in let x = 100
       in let g = proc (z) -(z, x)
          in -((f 1), (g 1))
-PROC
+CODE
   )
  (num-val -100))

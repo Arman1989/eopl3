@@ -34,12 +34,12 @@
 
 (check-equal?
  (parse
-  #<<LET
+  #<<CODE
 let x = 30
 in let x = -(x,1)
        y = -(x,2)
    in -(x,y)
-LET
+CODE
   )
  (a-program (let-exp (list 'x)
                      (list (const-exp 30))
@@ -51,12 +51,12 @@ LET
 
 (check-equal?
  (parse
-  #<<LET
+  #<<CODE
 let x = 30
 in let* x = -(x,1)
         y = -(x,2)
    in -(x,y)
-LET
+CODE
   )
  (a-program (let-exp (list 'x)
                      (list (const-exp 30))
@@ -148,13 +148,13 @@ LET
 
 (check-equal?
  (parse
-  #<<LET
+  #<<CODE
 cond
   equal?(x, i)   ==> 1
   greater?(x, i) ==> 2
   less?(x, i)    ==> 3
 end
-LET
+CODE
   )
  (a-program (cond-exp
              (list (equal?-exp (var-exp 'x) (var-exp 'i))

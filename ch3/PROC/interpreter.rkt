@@ -130,7 +130,7 @@
                 (let ([val1 (value-of-exp exp1 env)])
                   (let ([vals (expval->list val1)])
                     (if (= (length vars) (length vals))
-                        (value-of-exp body (extend-env-multi+ vars vals env))
+                        (value-of-exp body (extend-env* vars vals env))
                         (eopl:error 'unpack "The number of variables and values don't match"))))]
 
     [if-exp (exp1 exp2 exp3)
@@ -183,15 +183,6 @@
                                      (value-of-exp (car exps) env)
                                      env))))
 
-(define (extend-env-multi+ vars vals env)
-  (if (null? vars)
-      env
-      (extend-env-multi+ (cdr vars)
-                         (cdr vals)
-                         (extend-env (car vars)
-                                     (car vals)
-                                     env))))
-
 ;; Procedure ADT
 
 (define-datatype proc proc?
@@ -200,8 +191,6 @@
    (body expression?)
    (saved-env env?)])
 
-(define identifier? symbol?)
-
 (define (apply-procedure proc1 val)
   (cases proc proc1
     [procedure (var body saved-env)
@@ -209,7 +198,7 @@
 
 ;; Values
 ;;
-;; ExpVal = Int + Bool + Proc
+;; ExpVal = Int + Bool + List[ExpVal] + Proc
 ;; DenVal = ExpVal
 
 (define-datatype expval expval?

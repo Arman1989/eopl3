@@ -1,46 +1,52 @@
-#lang racket
+#lang eopl
 
 (provide
 
  ;; Build
  empty-env
  extend-env
+ extend-env*
 
  ;; Query
  env?
- apply-env)
+ apply-env
+
+ identifier? identifier=?)
+
+(define-datatype env env?
+  [empty]
+  [extend
+   (var identifier?)
+   (val any?)
+   (saved-env env?)])
 
 (define (empty-env)
-  '())
+  (empty))
 
 (define (extend-env var val env)
-  (cons (cons var val) env))
+  (extend var val env))
 
-(define env? list?)
+(define (extend-env* vars vals env)
+  (if (null? vars)
+      env
+      (extend-env* (cdr vars)
+                   (cdr vals)
+                   (extend-env (car vars)
+                               (car vals)
+                               env))))
 
-(define (apply-env env search-var)
-  (if (null? env)
-      (error 'apply-env "No binding for ~s" search-var)
-      (let ([saved-var (caar env)])
-        (if (symbol=? search-var saved-var)
-            (cdar env)
-            (apply-env (cdr env) search-var)))))
+(define (apply-env env1 search-var)
+  (cases env env1
+    [empty ()
+           (eopl:error 'apply-env "No binding for ~s" search-var)]
 
-(module+ test
-  (require rackunit)
+    [extend (saved-var saved-val saved-env)
+            (if (identifier=? search-var saved-var)
+                saved-val
+                (apply-env saved-env search-var))]))
 
-  (let ([env (extend-env
-              'd 6
-              (extend-env
-               'y 8
-               (extend-env
-                'x 7
-                (extend-env
-                 'y 14
-                 (empty-env)))))])
+(define identifier? symbol?)
 
-    (check-eq? (apply-env env 'd) 6)
-    (check-eq? (apply-env env 'y) 8)
-    (check-eq? (apply-env env 'x) 7)
+(define identifier=? eq?)
 
-    (check-exn #rx"No binding for a" (lambda () (apply-env env 'a)))))
+(define (any? v) #t)
