@@ -155,13 +155,13 @@
     [let*-exp (vars exps body)
               (value-of-exp body (extend-env-multi* vars exps env))]
 
-    [proc-exp (var body)
-              (proc-val (procedure var body env))]
+    [proc-exp (vars body)
+              (proc-val (procedure vars body env))]
 
-    [call-exp (rator rand)
+    [call-exp (rator rands)
               (let ([proc (expval->proc (value-of-exp rator env))]
-                    [arg (value-of-exp rand env)])
-                (apply-procedure proc arg))]))
+                    [args (map (lambda (rand) (value-of-exp rand env)) rands)])
+                (apply-procedure proc args))]))
 
 (define (extend-env-multi vars exps base-env)
   (define (go vars exps env)
@@ -187,14 +187,18 @@
 
 (define-datatype proc proc?
   [procedure
-   (var identifier?)
+   (vars (list-of identifier?))
    (body expression?)
    (saved-env env?)])
 
-(define (apply-procedure proc1 val)
+(define (apply-procedure proc1 vals)
   (cases proc proc1
-    [procedure (var body saved-env)
-               (value-of-exp body (extend-env var val saved-env))]))
+    [procedure (vars body saved-env)
+               (if (= (length vars) (length vals))
+                   (value-of-exp body (extend-env* vars vals saved-env))
+                   (eopl:error 'call-exp
+                               "Called with the wrong number of arguments, expected: ~s but given: ~s"
+                               (length vars) (length vals)))]))
 
 ;; Values
 ;;

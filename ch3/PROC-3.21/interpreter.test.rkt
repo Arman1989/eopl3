@@ -286,3 +286,15 @@ in let a = ((f 1) 2)
 CODE
   )
  (num-val 15))
+
+(check-equal?
+ (run "let f = proc () 1 in (f)")
+ (num-val 1))
+
+(check-equal?
+ (run "let g = proc (x, y, z) -(z, -(y, x)) in (g 1 2 3)")
+ (num-val 2))
+
+(check-exn
+ #rx"expected: 2 but given: 1"
+ (lambda () (run "let h = proc (a, b) -(a, b) in (h 5)")))
