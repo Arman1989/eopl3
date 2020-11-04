@@ -19,10 +19,3 @@
   (check-eq? (apply-env env 'x) 7)
 
   (check-exn #rx"No binding for a" (lambda () (apply-env env 'a))))
-
-(let ([env (extend-env* '(d y x y) '(6 8 7 14) (empty-env))])
-  (check-eq? (apply-env env 'd) 6)
-  (check-eq? (apply-env env 'y) 14)
-  (check-eq? (apply-env env 'x) 7)
-
-  (check-exn #rx"No binding for a" (lambda () (apply-env env 'a))))
