@@ -2,6 +2,7 @@
 
 (require "./env.rkt")
 (require "./parser.rkt")
+(require "./set.rkt")
 
 (provide
 
@@ -57,12 +58,55 @@
                (value-of-exp body (extend-env var val1 env)))]
 
     [proc-exp (var body)
-              (proc-val (procedure var body env))]
+              (let ([fv (diff-set (free-variables body)
+                                  (singleton-set var))])
+                (let ([saved-env (build-proc-env (set->list fv) env)])
+                  (proc-val (procedure var body saved-env))))]
 
     [call-exp (rator rand)
               (let ([proc (expval->proc (value-of-exp rator env))]
                     [arg (value-of-exp rand env)])
                 (apply-procedure proc arg))]))
+
+(define (build-proc-env vars env)
+  (if (null? vars)
+      (empty-env)
+      (extend-env (car vars)
+                  (apply-env env (car vars))
+                  (build-proc-env (cdr vars) env))))
+
+(define (free-variables exp)
+  (cases expression exp
+    [const-exp (n)
+               (empty-set)]
+
+    [var-exp (var)
+             (singleton-set var)]
+
+    [diff-exp (exp1 exp2)
+              (union-set (free-variables exp1)
+                         (free-variables exp2))]
+
+    [zero?-exp (exp1)
+               (free-variables exp1)]
+
+    [if-exp (exp1 exp2 exp3)
+            (union-set (union-set (free-variables exp1)
+                                  (free-variables exp2))
+                       (free-variables exp3))]
+
+    [let-exp (var exp1 body)
+             (union-set (free-variables exp1)
+                        (diff-set (free-variables body)
+                                  (singleton-set var)))]
+
+    [proc-exp (var body)
+              (diff-set (free-variables body)
+                        (singleton-set var))]
+
+    [call-exp (rator rand)
+              (union-set (free-variables rator)
+                         (free-variables rand))]))
 
 ;; Procedure ADT
 
