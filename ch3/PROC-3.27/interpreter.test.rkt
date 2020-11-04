@@ -110,3 +110,10 @@ in let a = ((f 1) 2)
 CODE
   )
  (num-val 15))
+
+
+;; Exercise 3.27
+
+(check-equal?
+ (run "(traceproc (x) -(x, 1) 5)")
+ (num-val 4))

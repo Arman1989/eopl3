@@ -16,6 +16,8 @@
 ;;
 ;;            ::= proc (Identifier) Expression
 ;;
+;;            ::= traceproc (Identifier) Expression
+;;
 ;;            ::= (Expression Expression)
 
 (provide
@@ -32,6 +34,7 @@
  if-exp
  let-exp
  proc-exp
+ traceproc-exp
  call-exp
 
  ;; Parser
@@ -66,6 +69,9 @@
 
     (expression ("proc" "(" identifier ")" expression)
                 proc-exp)
+
+    (expression ("traceproc" "(" identifier ")" expression)
+                traceproc-exp)
 
     (expression ("(" expression expression ")")
                 call-exp)))

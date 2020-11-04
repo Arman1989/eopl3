@@ -57,7 +57,10 @@
                (value-of-exp body (extend-env var val1 env)))]
 
     [proc-exp (var body)
-              (proc-val (procedure var body env))]
+              (proc-val (procedure #f var body env))]
+
+    [traceproc-exp (var body)
+                   (proc-val (procedure #t var body env))]
 
     [call-exp (rator rand)
               (let ([proc (expval->proc (value-of-exp rator env))]
@@ -68,14 +71,27 @@
 
 (define-datatype proc proc?
   [procedure
+   (trace boolean?)
    (var identifier?)
    (body expression?)
    (saved-env env?)])
 
 (define (apply-procedure proc1 val)
   (cases proc proc1
-    [procedure (var body saved-env)
-               (value-of-exp body (extend-env var val saved-env))]))
+    [procedure (trace var body saved-env)
+               (if trace
+                   (begin
+                     (display "Entering proc: ")
+                     (display var)
+                     (display "=")
+                     (display val)
+                     (newline)
+                     (let ([result (value-of-exp body (extend-env var val saved-env))])
+                       (display "Exiting proc: result=")
+                       (display result)
+                       (newline)
+                       result))
+                   (value-of-exp body (extend-env var val saved-env)))]))
 
 ;; Values
 ;;

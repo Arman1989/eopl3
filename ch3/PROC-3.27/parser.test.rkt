@@ -41,3 +41,8 @@
  (parse "(f x)")
  (a-program (call-exp (var-exp 'f)
                       (var-exp 'x))))
+
+(check-equal?
+ (parse "traceproc (x) -(x, 1)")
+ (a-program (traceproc-exp 'x (diff-exp (var-exp 'x)
+                                        (const-exp 1)))))
