@@ -5,6 +5,7 @@
  ;; Build
  empty-env
  extend-env
+ extend-env*
 
  ;; Query
  env?
@@ -24,6 +25,15 @@
 
 (define (extend-env var val env)
   (extend var val env))
+
+(define (extend-env* vars vals env)
+  (if (null? vars)
+      env
+      (extend-env* (cdr vars)
+                   (cdr vals)
+                   (extend-env (car vars)
+                               (car vals)
+                               env))))
 
 (define (apply-env env1 search-var)
   (cases env env1
