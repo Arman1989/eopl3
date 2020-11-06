@@ -31,7 +31,7 @@
                (num-val n)]
 
     [var-exp (var)
-             (apply-env env var)]
+             (apply-env env var construct-proc-val)]
 
     [diff-exp (exp1 exp2)
               (let ([val1 (value-of-exp exp1 env)]
@@ -59,10 +59,16 @@
     [proc-exp (var body)
               (proc-val (procedure var body env))]
 
+    [letrec-exp (proc-name bound-var proc-body letrec-body)
+                (value-of-exp letrec-body (extend-env-rec proc-name bound-var proc-body env))]
+
     [call-exp (rator rand)
               (let ([proc (expval->proc (value-of-exp rator env))]
                     [arg (value-of-exp rand env)])
                 (apply-procedure proc arg))]))
+
+(define (construct-proc-val var body saved-env)
+  (proc-val (procedure var body saved-env)))
 
 ;; Procedure ADT
 

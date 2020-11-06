@@ -110,3 +110,14 @@ in let a = ((f 1) 2)
 CODE
   )
  (num-val 15))
+
+(check-equal?
+ (run
+  #<<CODE
+letrec double(x) = if zero?(x)
+                   then 0
+                   else -((double -(x, 1)), -(0, 2))
+in (double 6)
+CODE
+  )
+ (num-val 12))
