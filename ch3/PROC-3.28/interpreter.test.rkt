@@ -142,3 +142,19 @@ CODE
  ; with lexical binding we'd get
  ; (num-val 3)
  (num-val 5))
+
+;; Exercise 3.29
+;;
+;; What if f's formal parameter were a?
+
+(check-equal?
+ (run
+  #<<CODE
+let a = 3
+in let p = proc (z) a
+   in let f = proc (a) (p 0)
+      in let a = 5
+         in (f 2)
+CODE
+  )
+ (num-val 2))
