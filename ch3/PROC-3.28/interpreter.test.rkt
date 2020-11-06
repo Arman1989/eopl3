@@ -93,7 +93,8 @@ in let f = proc (z) -(z, x)
          in -((f 1), (g 1))
 CODE
   )
- (num-val -100))
+ ; (num-val -100)) This isn't true anymore when using dynamic binding
+ (num-val 0))
 
 ;; Exercise 3.20
 ;;
@@ -110,3 +111,34 @@ in let a = ((f 1) 2)
 CODE
   )
  (num-val 15))
+
+;; Exercise 3.28
+;;
+;; Dynamic binding (or dynamic scoping)
+
+(check-equal?
+ (run
+  #<<CODE
+let a = 3
+in let p = proc (x) -(x, a)
+   in let a = 5
+      in -(a, (p 2))
+CODE
+  )
+ ; with lexical binding we'd get
+ ; (num-val 6)
+ (num-val 8))
+
+(check-equal?
+ (run
+  #<<CODE
+let a = 3
+in let p = proc (z) a
+   in let f = proc (x) (p 0)
+      in let a = 5
+         in (f 2)
+CODE
+  )
+ ; with lexical binding we'd get
+ ; (num-val 3)
+ (num-val 5))

@@ -57,25 +57,24 @@
                (value-of-exp body (extend-env var val1 env)))]
 
     [proc-exp (var body)
-              (proc-val (procedure var body env))]
+              (proc-val (procedure var body))]
 
     [call-exp (rator rand)
               (let ([proc (expval->proc (value-of-exp rator env))]
                     [arg (value-of-exp rand env)])
-                (apply-procedure proc arg))]))
+                (apply-procedure proc arg env))]))
 
 ;; Procedure ADT
 
 (define-datatype proc proc?
   [procedure
    (var identifier?)
-   (body expression?)
-   (saved-env env?)])
+   (body expression?)])
 
-(define (apply-procedure proc1 val)
+(define (apply-procedure proc1 val env)
   (cases proc proc1
-    [procedure (var body saved-env)
-               (value-of-exp body (extend-env var val saved-env))]))
+    [procedure (var body)
+               (value-of-exp body (extend-env var val env))]))
 
 ;; Values
 ;;
