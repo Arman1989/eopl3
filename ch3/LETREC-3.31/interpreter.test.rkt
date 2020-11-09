@@ -121,3 +121,14 @@ in (double 6)
 CODE
   )
  (num-val 12))
+
+(check-equal?
+ (run
+  #<<CODE
+letrec add(x, y) = if zero?(y)
+                   then x
+                   else (add -(x, -(0, 1)) -(y, 1))
+in (add 5 10)
+CODE
+  )
+ (num-val 15))

@@ -57,31 +57,31 @@
                (value-of-exp body (extend-env var val1 env)))]
 
     [proc-exp (var body)
-              (proc-val (procedure var body env))]
+              (proc-val (procedure (list var) body env))]
 
-    [letrec-exp (proc-name bound-var proc-body letrec-body)
-                (value-of-exp letrec-body (extend-env-rec proc-name bound-var proc-body env))]
+    [letrec-exp (proc-name bound-vars proc-body letrec-body)
+                (value-of-exp letrec-body (extend-env-rec proc-name bound-vars proc-body env))]
 
-    [call-exp (rator rand)
+    [call-exp (rator rands)
               (let ([proc (expval->proc (value-of-exp rator env))]
-                    [arg (value-of-exp rand env)])
-                (apply-procedure proc arg))]))
+                    [args (map (lambda (rand) (value-of-exp rand env)) rands)])
+                (apply-procedure proc args))]))
 
-(define (construct-proc-val var body saved-env)
-  (proc-val (procedure var body saved-env)))
+(define (construct-proc-val vars body saved-env)
+  (proc-val (procedure vars body saved-env)))
 
 ;; Procedure ADT
 
 (define-datatype proc proc?
   [procedure
-   (var identifier?)
+   (vars (list-of identifier?))
    (body expression?)
    (saved-env env?)])
 
-(define (apply-procedure proc1 val)
+(define (apply-procedure proc1 vals)
   (cases proc proc1
-    [procedure (var body saved-env)
-               (value-of-exp body (extend-env var val saved-env))]))
+    [procedure (vars body saved-env)
+               (value-of-exp body (extend-env* vars vals saved-env))]))
 
 ;; Values
 ;;
