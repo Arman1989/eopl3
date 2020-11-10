@@ -22,9 +22,9 @@
    (val any?)
    (saved-env env?)]
   [extend-rec
-   (p-name identifier?)
-   (b-var identifier?)
-   (p-body expression?)
+   (p-names (list-of identifier?))
+   (b-vars (list-of identifier?))
+   (p-bodys (list-of expression?))
    (saved-env env?)])
 
 (define (empty-env)
@@ -33,8 +33,8 @@
 (define (extend-env var val env)
   (extend var val env))
 
-(define (extend-env-rec proc-name var proc-body env)
-  (extend-rec proc-name var proc-body env))
+(define (extend-env-rec proc-names vars proc-bodys env)
+  (extend-rec proc-names vars proc-bodys env))
 
 (define (apply-env env1 search-var construct-proc-val)
   (cases env env1
@@ -46,10 +46,21 @@
                 saved-val
                 (apply-env saved-env search-var construct-proc-val))]
 
-    [extend-rec (p-name b-var p-body saved-env)
-                (if (identifier=? search-var p-name)
-                    (construct-proc-val b-var p-body env1)
-                    (apply-env saved-env search-var construct-proc-val))]))
+    [extend-rec (p-names b-vars p-bodys saved-env)
+                (let ([args (find-args p-names b-vars p-bodys search-var)])
+                  (if args
+                      (construct-proc-val (car args) (cadr args) env1)
+                      (apply-env saved-env search-var construct-proc-val)))]))
+
+(define (find-args p-names b-vars p-bodys search-var)
+  (if (null? p-names)
+      #f
+      (if (identifier=? search-var (car p-names))
+          (list (car b-vars) (car p-bodys))
+          (find-args (cdr p-names)
+                     (cdr b-vars)
+                     (cdr p-bodys)
+                     search-var))))
 
 (define identifier? symbol?)
 

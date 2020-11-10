@@ -39,10 +39,25 @@
 
 (check-equal?
  (parse "letrec f(x) = a in b")
- (a-program (letrec-exp 'f
-                        'x
-                        (var-exp 'a)
+ (a-program (letrec-exp (list 'f)
+                        (list 'x)
+                        (list (var-exp 'a))
                         (var-exp 'b))))
+
+(check-equal?
+ (parse
+  #<<CODE
+letrec
+  f(x) = (g x)
+  g(y) = (f y)
+in (f 1)
+CODE
+  )
+ (a-program (letrec-exp (list 'f 'g)
+                        (list 'x 'y)
+                        (list (call-exp (var-exp 'g) (var-exp 'x))
+                              (call-exp (var-exp 'f) (var-exp 'y)))
+                        (call-exp (var-exp 'f) (const-exp 1)))))
 
 (check-equal?
  (parse "(f x)")

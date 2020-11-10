@@ -121,3 +121,18 @@ in (double 6)
 CODE
   )
  (num-val 12))
+
+;; Exercise 3.32
+;;
+;; Allow the declaration of any number of mutually recursive unary procedures.
+
+(check-equal?
+ (run
+  #<<CODE
+letrec
+  even(x) = if zero?(x) then 1 else (odd -(x, 1))
+  odd(x)  = if zero?(x) then 0 else (even -(x, 1))
+in (odd 13)
+CODE
+  )
+ (num-val 1))
