@@ -136,3 +136,35 @@ in (odd 13)
 CODE
   )
  (num-val 1))
+
+;; Exercise 3.33
+;;
+;; Allow the declaration of any number of mutually recursive procedures,
+;; each of possibly many arguments.
+
+(check-equal?
+ (run
+  #<<CODE
+letrec
+  fact(n) =
+    if zero?(n) then
+      1
+    else
+      (mult n (fact -(n, 1)))
+
+  mult(a, b) =
+    if zero?(a) then
+      0
+    else
+      (add b (mult -(a, 1) b))
+
+  add(a, b) =
+    if zero?(a) then
+      b
+    else
+      (add -(a, 1) -(b, -(0, 1)))
+in
+  (fact 5)
+CODE
+  )
+ (num-val 120))

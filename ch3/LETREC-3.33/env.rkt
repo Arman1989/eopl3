@@ -7,6 +7,7 @@
  ;; Build
  empty-env
  extend-env
+ extend-env*
  extend-env-rec
 
  ;; Query
@@ -23,7 +24,7 @@
    (saved-env env?)]
   [extend-rec
    (p-names (list-of identifier?))
-   (b-vars (list-of identifier?))
+   (b-vars (list-of (list-of identifier?)))
    (p-bodys (list-of expression?))
    (saved-env env?)])
 
@@ -32,6 +33,15 @@
 
 (define (extend-env var val env)
   (extend var val env))
+
+(define (extend-env* vars vals env)
+  (if (null? vars)
+      env
+      (extend-env* (cdr vars)
+                   (cdr vals)
+                   (extend-env (car vars)
+                               (car vals)
+                               env))))
 
 (define (extend-env-rec proc-names vars proc-bodys env)
   (extend-rec proc-names vars proc-bodys env))

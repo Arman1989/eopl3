@@ -16,9 +16,9 @@
 ;;
 ;;            ::= proc (Identifier) Expression
 ;;
-;;            ::= letrec {Identifier (Identifier) = Expression}* in Expression
+;;            ::= letrec {Identifier ({Identifier}*(,)) = Expression}* in Expression
 ;;
-;;            ::= (Expression Expression)
+;;            ::= (Expression {Expression}*)
 
 (provide
 
@@ -70,10 +70,10 @@
     (expression ("proc" "(" identifier ")" expression)
                 proc-exp)
 
-    (expression ("letrec" (arbno identifier "(" identifier ")" "=" expression) "in" expression)
+    (expression ("letrec" (arbno identifier "(" (separated-list identifier ",") ")" "=" expression) "in" expression)
                 letrec-exp)
 
-    (expression ("(" expression expression ")")
+    (expression ("(" expression (arbno expression) ")")
                 call-exp)))
 
 (sllgen:make-define-datatypes scanner-spec grammar)
